@@ -7,3 +7,12 @@ jspm_packages
 
 # Webpack directories
 .webpack
+
+# local env variables and settings
+local.config.json
+
+# ignore test results
+junit.xml
+
+# ignore coverage
+coverage
