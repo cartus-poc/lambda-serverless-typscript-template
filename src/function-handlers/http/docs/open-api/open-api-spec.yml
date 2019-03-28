@@ -1,0 +1,109 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Examlpe API
+  description: A really great API
+servers:
+  - url: http://localhost:3000/v1/example/
+paths:
+  /user:
+    post:
+      description: Creates a new user
+      operationId: Post New User
+      tags: 
+        - Users
+      requestBody:
+        description: | 
+          ## Add a new User
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+# Data Models
+components:
+  schemas:
+    User:
+      required:
+        - name
+        - email 
+      properties:
+        name:
+          type: string
+          description: The name of the user
+          example: Bob Smith
+        email:
+          type: string
+          description: The email of the user
+          example: Bob.Smith@company.com
+    UserResponse:
+      allOf:
+        - type: object
+          properties:
+            id: 
+              type: integer
+              description: The database id
+              example: 12345
+        - $ref: '#/components/schemas/User'
+    
+    # Generic Error response
+    Error:
+      required:
+        - name
+        - message
+        - debugId
+      properties:
+        name:
+          type: string
+          description: A human-readable, unique name for the error
+          example: VALIDATION_ERROR
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: JSON Pointer to the field in error if in body
+                example: /from/name
+              value:
+                type: string
+                description: Value of the field in Error
+                example: Some Value from JSON Property
+              issue:
+                type: string
+                description: Reason for Error
+                example: Value exceeds maximum length of 10 characters
+              location:
+                type: string
+                description: The location of the field in the error, either query, path, or body. If this field is not present, the default value is body.
+                example: body
+        debugId:
+          type: string
+          description: A unique error identifier generated on the server-side and logged for correlation purposes.
+          example: 3e11297b3c7c16cd727511b9c8d9a086
+        message:
+          type: string
+          description: A human-readable message, describing the error
+          example: Invalid JSON format. Could not parse JSON structure
+        

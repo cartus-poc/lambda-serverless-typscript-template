@@ -24,6 +24,7 @@ module.exports = {
     rules: [
       // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
       { test: /\.tsx?$/, loader: 'ts-loader' },
+      { test: /\.(txt|css|xml|json|rtf|md|yml|yaml|html)$/, loader: 'raw-loader' }
     ],
   },
 };
